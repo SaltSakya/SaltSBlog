@@ -10,7 +10,8 @@ export default hopeTheme({
 
   author: {
     name: "舒服嘉",
-    url: "https://mrhope.site",
+    url: "https://saltsakya.github.io",
+    email: "SaltSakya@Yahoo.com",
   },
 
   iconAssets: "iconfont",
@@ -117,8 +118,11 @@ export default hopeTheme({
     blog: true,
 
     comment: {
-      // @ts-expect-error: You should generate and use your own comment service
       provider: "Giscus",
+      repo: "SaltSakya/SaltSakya.github.io",
+      repoId: "R_kgDOIDHxWQ",
+      category: "General",
+      categoryId: "DIC_kwDOIDHxWc4CWfGh",
     },
 
     // all features are enabled for demo, only preserve features you need here
@@ -162,6 +166,9 @@ export default hopeTheme({
       tabs: true,
       vPre: true,
       vuePlayground: true,
+
+      tasklist: true,
+
     },
 
     // uncomment these if you want a PWA
