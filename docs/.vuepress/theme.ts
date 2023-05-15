@@ -168,7 +168,7 @@ export default hopeTheme({
       vuePlayground: true,
 
       tasklist: true,
-
+      container: true
     },
 
     // uncomment these if you want a PWA
