@@ -14,7 +14,7 @@ tag:
 
 2023 年五一愉快的面基时来了一波线下抽卡，愉快之余了解到还有明日方舟主播有**代抽**这样的业务。其业务大致为：付费约 600 元，主播会进行带抽，直到抽出为止，在此过程中超过的部分由主播负担，不足的部分不予退还。
 
-我听到这样的业务第一反应是，“这不是有可能赔本么？”，紧接着就想起了大数理论，即：样本数量越多，其算数平均值就有可能接近期望。这意味着，只要代抽所需开销的期望低于门票钱，那能赚到钱的概率也就越高。好奇于这个期望大致是多少，故写下这篇文章进行计算。
+我听到这样的业务第一反应是，“这不是有可能赔本么？”，紧接着就想起了大数理论，即：样本数量越多，其算数平均值就有可能接近期望。这意味着，只要代抽所需开销的期望低于门票钱，那参加的人越多，能赚到钱的概率也就越高。好奇于这个期望大致是多少，故写下这篇文章进行计算。
 
 <!-- more -->
 
@@ -74,6 +74,134 @@ tag:
 在<span style="color:crimson">【联动寻访】</span>中前120次寻访必定能够获得限定 6★ 干员，仅限一次。[^3]
 :::
 
+
+
+<!-- #region demo -->
+
+::: echarts Dynamic Data & Time Axis
+
+```js
+
+const probAtIndex = [];// 上次取得 6 星后的第 i+1 次获得 6 星的概率
+const probGet6At = [];// 上次取得 6 星后在第 i+1 次获得第 1 个 6 星的概率
+const probGet6Before = [];// 上次取得 6 星后在第 i+1 次已获得至少 1 个 6 星的概率
+
+let no6Total = 1;// 连续 i 次未获得的概率
+let get6Total = 0;
+
+const listItem = (label, x, y) => {
+  return {
+    name: label,
+    value: [ x, y ],
+  };
+};
+
+for (let i = 0; i < 99; i++){
+  let prob = ( i < 50 ) ? 0.02 : ((i-48)*0.02);
+  let count = (i+1).toString();
+
+  get6Total += no6Total * prob;
+
+  probAtIndex.push(listItem(
+    "第" + count + "次寻访到 6★",
+    count,
+    prob
+  ));
+
+  probGet6At.push(listItem(
+    "第" + count + "次寻访首次获得 6★",
+    count,
+    probAtIndex[i].value[1] * no6Total
+  ));
+
+  probGet6Before.push(listItem(
+    "asdf",
+    count,
+    get6Total
+  ))
+
+  no6Total *= (1-probAtIndex[i].value[1]);
+}
+
+
+const option = {
+  tooltip: {
+    trigger: "axis",
+    formatter: function (params) {
+      return (
+        "第" + params[0].value[0] + "次寻访：<br />" + 
+        "获得 6★ 的概率为：" + Math.trunc(params[0].value[1]*100) + "%<br />" + 
+        "首次获得 6★ 的概率为：" + Math.round(params[1].value[1]*1000000)/10000 + "%<br />" + 
+        "已获得 6★ 的概率为：" + Math.round(params[2].value[1]*1000000)/10000 + "%<br />"
+      );
+    },
+    axisPointer: {
+      animation: false,
+    },
+  },
+  xAxis: {
+    type: "value",
+    name: "寻访次数",
+    splitLine: {
+      show: false,
+    },
+  },
+  yAxis: {
+    type: "value",
+    name: "概率",
+    splitLine: {
+      show: false,
+    },
+  },
+  legend:{
+    show: true,
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      mark: {
+        show: true,
+      },
+      dataView: {
+        show: true,
+        readOnly: false,
+      },
+      restore: {
+        show: true,
+      },
+      saveAsImage: {
+        show: true,
+      },
+    },
+  },
+  series: [
+    {
+      name: "获得6★",
+      type: "line",
+      showSymbol: false,
+      data: probAtIndex,
+    },
+    {
+      name: "首次获得6★",
+      type: "line",
+      showSymbol: false,
+      data: probGet6At,
+    },
+    {
+      name: "已获得6★",
+      type: "line",
+      showSymbol: false,
+      data: probGet6Before,
+    },
+  ],
+};
+```
+
+:::
+
+<!-- #endregion demo -->
+
+
 ### 明日方舟氪金数值 <Badge text="新" />
 ### 代抽的前提
 ## 明日方舟代抽相关计算
@@ -81,6 +209,7 @@ tag:
 ## 总结 
 
 ## 参考
+
 [^1]: 寻访规则 - PRTS - 玩家自由构筑的明日方舟中文Wiki <https://prts.wiki/w/%E5%AF%BB%E8%AE%BF%E8%A7%84%E5%88%99>
 [^2]: 部分寻访规则调整说明 - 明日方舟 - TapTap <https://www.taptap.cn/moment/388012575213752034>
 [^3]: 砺火成锋 - PRTS - 玩家自由构筑的明日方舟中文Wiki <https://prts.wiki/w/%E7%A0%BA%E7%81%AB%E6%88%90%E9%94%8B>
