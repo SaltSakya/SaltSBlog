@@ -17,6 +17,12 @@ export const zhSidebar = sidebar({
       children: "structure",
     },
     {
+      text: "游戏程序高级知识",
+      icon: "study",
+      prefix: "game_adv_knlg/",
+      children: "structure",
+    },
+    {
       text: "其他文章",
       icon: "note",
       prefix: "others/",
