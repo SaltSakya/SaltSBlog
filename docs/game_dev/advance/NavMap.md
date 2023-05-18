@@ -1,6 +1,6 @@
 ---
 title: NavMap 地图框架研究
-icon: note
+icon: sitemap
 #cover: /assets/images/Touch Fish Time.jpg
 isOriginal: true
 headerDepth: 3

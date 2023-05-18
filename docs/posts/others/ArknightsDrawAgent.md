@@ -1,6 +1,6 @@
 ---
 title: 明日方舟代抽的相关研究
-icon: note
+icon: software
 cover: /assets/images/Touch Fish Time.jpg
 isOriginal: true
 date: 2022-05-15
