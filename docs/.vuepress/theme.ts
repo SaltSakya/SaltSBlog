@@ -14,7 +14,12 @@ export default hopeTheme({
     email: "SaltSakya@Yahoo.com",
   },
 
-  iconAssets: "iconfont",
+  iconAssets: [
+    "iconfont",
+    "//at.alicdn.com/t/c/font_4075628_z657y6qr5vr.css"
+  ],
+
+  iconPrefix: "iconfont icon-",
 
   logo: "/logo.svg",
 
