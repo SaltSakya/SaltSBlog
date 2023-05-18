@@ -2,6 +2,7 @@
 title: 布局与功能禁用
 icon: config
 order: 3
+article: false
 category:
   - 使用指南
 tag:

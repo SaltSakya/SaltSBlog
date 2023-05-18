@@ -2,7 +2,7 @@
 title: 其他文章
 index: false
 icon: folder
-article : false
+article: false
 category:
   - 其他
 ---
