@@ -18,7 +18,11 @@ export default defineUserConfig({
   },
 
   theme,
-
+  markdown:{
+    headers:{
+      level: [2, 3, 4, 5]
+    }
+  }
   // Enable it with pwa
   // shouldPrefetch: false,
 });
