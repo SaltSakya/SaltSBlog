@@ -124,7 +124,7 @@ export default hopeTheme({
       category: "General",
       categoryId: "DIC_kwDOIDHxWc4CWfGh",
     },
-
+    
     // all features are enabled for demo, only preserve features you need here
     mdEnhance: {
       align: true,
@@ -150,13 +150,112 @@ export default hopeTheme({
       },
       stylize: [
         {
-          matcher: "Recommended",
+          matcher: "public",
           replacer: ({ tag }) => {
-            if (tag === "em")
+            if (tag === "em"||tag === "strong")
               return {
                 tag: "Badge",
-                attrs: { type: "tip" },
-                content: "Recommended",
+                attrs: { type: "tip", vertical: "middle"},
+                content: "公开",
+              };
+          },
+        },
+        {
+          matcher: "protected",
+          replacer: ({ tag }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { type: "warning", vertical: "middle"},
+                content: "保护",
+              };
+          },
+        },
+        {
+          matcher: "private",
+          replacer: ({ tag }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { type: "danger", vertical: "middle"},
+                content: "私有",
+              };
+          },
+        },
+        {
+          matcher: "virtual",
+          replacer: ({ tag }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "MediumPurple", vertical: "middle"},
+                content: "虚",
+              };
+          },
+        },
+        {
+          matcher: "static",
+          replacer: ({ tag }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "MediumPurple", vertical: "middle"},
+                content: "静态",
+              };
+          },
+        },
+        {
+          matcher: "readonly",
+          replacer: ({ tag }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "MediumPurple", vertical: "middle"},
+                content: "只读",
+              };
+          },
+        },
+        {
+          matcher: /^class:(.*)$/,
+          replacer: ({ tag, content, }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "MediumTurquoise", vertical: "middle"},
+                content: content.substring(6, content.length)
+              };
+          },
+        },
+        {
+          matcher: /^enum:(.*)$/,
+          replacer: ({ tag, content, }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "YellowGreen", vertical: "middle"},
+                content: content.substring(5, content.length)
+              };
+          },
+        },
+        {
+          matcher: /^struct:(.*)$/,
+          replacer: ({ tag, content, }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "LimeGreen", vertical: "middle"},
+                content: content.substring(7, content.length)
+              };
+          },
+        },
+        {
+          matcher: /^type:(.*)$/,
+          replacer: ({ tag, content, }) => {
+            if (tag === "em"||tag === "strong")
+              return {
+                tag: "Badge",
+                attrs: { color: "CornflowerBlue", vertical: "middle"},
+                content: content.substring(5, content.length)
               };
           },
         },
@@ -166,7 +265,7 @@ export default hopeTheme({
       tabs: true,
       vPre: true,
       vuePlayground: true,
-
+      
       tasklist: true,
       container: true
     },
