@@ -11,24 +11,18 @@ export const zhSidebar = sidebar({
       children: "structure",
     },
     {
-      text: "文章",
-      icon: "note",
-      prefix: "posts/",
-      children: "structure",
-    },
-    {
       text: "游戏程序高级知识",
       icon: "study",
-      prefix: "game_adv_knlg/",
+      prefix: "game_dev/advance/",
       children: "structure",
     },
     {
       text: "其他文章",
       icon: "note",
-      prefix: "others/",
+      prefix: "posts/others/",
       children: "structure",
     },
-    "intro",
-    "slides",
+    //"intro",
+    //"slides",
   ],
 });
