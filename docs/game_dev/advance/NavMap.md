@@ -1,6 +1,6 @@
 ---
 title: NavMap 地图框架研究
-icon: sitemap
+icon: note
 #cover: /assets/images/Touch Fish Time.jpg
 isOriginal: true
 headerDepth: 3
@@ -96,14 +96,21 @@ tag:
 
 * *public***virtual***type:void* `Init()` 初始化
 > * 若 `IsInit` 为 `false`，调用 `InitConfig()`
-* *public***virtual***type:void* `CreateMap()`创建地图，请确保在进行AddMarker前先调用创建地图
+* *public***virtual***type:void* `CreateMap()`创建地图，请确保在进行 AddMarker 前先调用创建地图
 > * 读取当前场景的配置
 > * 将当前场景配置保存至 `NavMapConfigCur`
 * *public***virtual***type:void* `DestroyMap()` 
 > * 令 `m_MarkerIdCounter = 0`
 > * 调用 `m_MarkersDic.Clear()`
-* *public***virtual***type:void* `OnUpdate(float deltaTime)`
->
+* *public***virtual***type:void* `OnUpdate(float deltaTime)` 进行更新
+> * 对每一个 Marker 调用 `OnUpdate(deltaTime)`
+> * 当有需要移除的 Marker 时，逐个移除
+
+:::
+
+::: details Config
+
+*private*<badge text="编辑器公开" vertical="middle" /> sadf
 
 :::
 
