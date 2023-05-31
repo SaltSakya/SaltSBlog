@@ -3,7 +3,7 @@ import theme from "./theme.js";
 
 export default defineUserConfig({
   base: "/",
-
+  port: 8081,
   locales: {
     "/": {
       lang: "zh-CN",
