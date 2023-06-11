@@ -275,9 +275,15 @@ export default hopeTheme({
       vuePlayground: true,
       
       tasklist: true,
-      container: true
+      container: true,
+      card: true,
+      
     },
-
+    components:{
+        components:[
+          "ArtPlayer",
+        ]
+    },
     // uncomment these if you want a PWA
     // pwa: {
     //   favicon: "/favicon.ico",
