@@ -1,6 +1,8 @@
 ---
 title: 名词索引
+index: false
 icon: module
+article: false
 #cover: /assets/images/Touch Fish Time.jpg
 date: 2022-06-10
 category:

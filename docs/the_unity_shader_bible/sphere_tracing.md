@@ -1,5 +1,6 @@
 ---
-title: 光线追踪
+title: 球体追踪
+order: 11
 icon: module
 #cover: /assets/images/Touch Fish Time.jpg
 date: 2022-06-11

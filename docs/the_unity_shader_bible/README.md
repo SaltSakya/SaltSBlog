@@ -1,6 +1,8 @@
 ---
 title: Unity 着色器圣经
+index: false
 icon: repo
+article: false
 #cover: /assets/images/Touch Fish Time.jpg
 #isOriginal: true
 date: 2022-06-11
