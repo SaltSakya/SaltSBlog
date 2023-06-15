@@ -106,3 +106,93 @@ Shader "InspectorPath/shaderName"
   Fallback "ExampleOtherShader"
 }
 ```
+::: center
+(Cg 和 HLSL 的着色器结构都是相同的，唯一的不同在于 Cg 和 HLSL <br/>
+的程序块。为了兼容性，两者都能在最新版的 Unity 中编译。)
+:::
+
+前面的示例展示了着色器的主要结构。着色器以它在 **Inspector** 中的路径（InspectorPath）和**名称**（shaderName）开始，之后是**属性**（如材质、向量、颜色等），再之后是**子材质**，最后是可选的**回退**。
+
+“InspectorPath”代表我们要选择要应用到材质的着色器的位置。
+这个选择是在 Unity 的 Inspector 中进行的。
+
+我们要记住，我们不能直接将着色器应用到一个多边形物体上，我们需要先创建一个材质，才能将其应用到多边形物体上。
+我们的 USB_simple_color 着色器默认路径是“Unlit”，这意味着：对于 Unity，我们需要先选择我们的材质，在 Inspector 面板中，找到路径 Unlit 并应用 USB_simple_color。
+
+我们必须要知道的一个结构因素是，GPU 会从上到下线性地阅读代码，因此如果我们快速创建了一个函数，并把它写在了使用它的代码块下方，GPU 就无法阅读到它，于是就会在着色器处理中产生一个错误，于是回退就会指定另一个着色器，以便显卡可以继续其处理。
+
+让我们做个小练习来理解这个概念。
+``` hlsl
+// 1. declare out function 定义我们的函数
+float4 ourFunction()
+{
+  // your code here ... 代码写在这里...
+}
+// 2. we use the function 使用函数
+fixed4 frag (v2f i) : SV_Target
+{
+  // we are using the function here 在这里使用我们的函数
+  float4 f = ourFunction();
+  return f;
+}
+```
+
+上述函数的与语法可能无法完全理解。
+创建这些只是为了概念化一个函数与另一个函数的位置关系。
+
+在 [4.0.4 节](implementation_and_other_concepts.md#_4-4-hlsl-中的函数结构)我们会详细介绍函数的结构。
+现在，我们只要知道上述例子的结构是正确的，因为函数 `ourFunction` 已经在代码块被放置的位置写过了。
+GPU 会先读到 `ourFunction` 然后才继续执行片元阶段 `frag`。
+
+让我们看看另一种情况。
+``` hlsl
+// 2. we use the function 使用函数
+fixed4 frag (v2f i) : SV_Target
+{
+  // we are using the function here 在这里使用我们的函数
+  float4 f = ourFunction();
+  return f;
+}
+// 1. declare out function 定义我们的函数
+float4 ourFunction()
+{
+  // your code here ... 代码写在这里...
+}
+```
+
+相对的，这个结构会产生一个“错误”，因为函数 `ourFunction` 被写在了使用它的地方下面。
+
+## 3.2 ShaderLab 着色器
+### 3.2.1 ShaderLab 属性
+#### 3.2.1.1 数字与滑块属性
+#### 3.2.1.2 颜色与向量属性
+#### 3.2.1.3 纹理属性
+
+## 3. Material Property drawer
+## 3. MPD Toggle
+## 3. MPD KeywordEnum
+## 3. MPD Enum
+## 3. MPD PowerSlider and IntRange
+## 3. MPD Space and Header
+## 3. ShaderLab SubShader
+## 3. 子着色器标签
+## 3. Queue标签
+## 3. 渲染类型标签
+## 3. 子着色器混合
+## 3. 子着色器 AlphaToMask
+## 3. 子着色器颜色Mask
+## 3. 子着色器 Culling 和深度测试
+## 3. ShaderLab Cull
+## 3. ShaderLab ZWrite
+## 3. ShaderLab ZTest
+## 3. ShaderLab Stencil
+## 3. ShaderLab 通道
+## 3. CGPROGRAM / ENDCG
+## 3. 数据类型
+## 3. Cg / HLSL Pragmas
+## 3. Cg / HLSL Include
+## 3. Cg / HLSL 顶点输入与顶点输出
+## 3. Cg / HLSL 变量和关联向量
+## 3. Cg / HLSL 顶点着色器阶段
+## 3. Cg / HLSL 片元着色器阶段
+## 3. ShaderLab 回退
