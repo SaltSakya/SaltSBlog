@@ -24,6 +24,14 @@ export const zhNavbar = navbar([
           { text: "地图框架", icon: "sitemap", link: "NavMap" },
         ],
       },
+      {
+        text: "TA",
+        icon: "advance",
+        prefix: "advance/",
+        children: [
+          { text: "Unity 着色器圣经", icon: "repo", link: "the_unity_shader_bible" },
+        ],
+      },
     ]
   },
   {

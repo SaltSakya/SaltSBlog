@@ -1,7 +1,7 @@
 ---
 title: 初步观察
 order: 1
-icon: module
+icon: eye
 #cover: /assets/images/Touch Fish Time.jpg
 date: 2022-06-10
 category:

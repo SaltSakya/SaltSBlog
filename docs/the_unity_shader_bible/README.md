@@ -24,22 +24,7 @@ The Unity Shaders Bible 是由 Fabrizio Espíndola 所著的一本关于计算�
 ## 章节索引
 * [中文索引](idx.md#中文索引)
 * [英文索引](idx.md#英文索引)
-## 第Ⅰ章 着色器编程语言介绍
-* [初步观察](initial_observations.md)
-* [Unity 中的着色器](shader_in_unity.md)
-* [属性、命令和函数](properties_commands_and_functions.md)
-* [实现与其他概念](implementation_and_other_concepts.md)
 
-## 第Ⅱ章 光照、阴影和表面
-* [本章介绍](introduction_to_the_chapter.md)
-* [表面](surface.md)
-* [光照](lighting.md)
-* [阴影](shadow.md)
-* [Shader Graph](shader_graph.md)
-
-## 第Ⅲ章 计算着色器、光线追踪和球体追踪
-* [高级概念](advanced_concepts.md)
-* [球体追踪](sphere_tracing.md)
-* [光线追踪](ray_tracing.md)
+<AutoCatalog base='/the_unity_shader_bible/' />
 
 [^1]: [Jettelly 页面](https://www.jettelly.com/books/unity-shaders-bible/)
