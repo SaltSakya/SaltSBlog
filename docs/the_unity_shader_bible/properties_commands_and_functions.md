@@ -1,7 +1,7 @@
 ---
 title: 属性、命令和函数
 order: 3
-icon: module
+icon: code
 #cover: /assets/images/Touch Fish Time.jpg
 date: 2022-06-11
 category:
@@ -164,12 +164,186 @@ float4 ourFunction()
 相对的，这个结构会产生一个“错误”，因为函数 `ourFunction` 被写在了使用它的地方下面。
 
 ## 3.2 ShaderLab 着色器
+
+我们编写着色器代码时，大多数都将从**着色器**的生命开始，随后是它在 **Inspector** 中的路径，最后是我们指定给它的**名称**（形如着色器“shader inspector path / shader name”）。
+
+子着色器和回退之类的属性都是写在 ShaderLab 声明性语言的 “Shader” 域中的。
+
+``` hlsl
+Shader "InspectorPath/shaderName"
+{
+  // write ShaderLab code here 此处编写 ShaderLab 代码
+}
+```
+
+因为 USB_simple_color 已经默认声明了 “Unlit/USB_simple_color”，如果我们要将其指定给一个材质，我们就需要在 Unity 的 Inspector 中，找到 Unlit 路径，并选择“USB_simple_color”。
+
+路径和名称都可以根据项目的规范要求来更改。
+
+``` hlsl
+// default value 默认值
+Shader "Unlit / USB_simple_color"
+{
+  // write ShaderLab code here 此处编写 ShaderLab 代码
+}
+
+// customize path to USB (Unity Shader Bible) Unity 着色器圣经的自定义路径
+Shader "USB / USB_simple_color"
+{
+  // write ShaderLab code here 此处编写 ShaderLab 代码
+}
+```
+
 ### 3.2.1 ShaderLab 属性
+
+属性对应可在 Unity 的 Inspector 中调整的一系列参数。
+共有 8 种数值和用处各不相同的属性。
+无论是在动态地还是运行时，我们都可以使用这些与我们要创建或修改的着色器相关属性。
+声明一个属性的语法如下：
+
+``` hsls
+PropertyName ("display name", type) = defaultValue
+```
+
+"**PropertyName**"表示属性名（如：_MainTex），
+"**display name**"对应在 Unity 的 Inspector 中显示的属性名（如：Texture），
+"**type**"指定了属性的类型（如：Color、Vector、2D 等），
+最后，顾名思义，"**defaultValue**"是指定给属性的默认值（例如，如果我们的属性是一个 “Color” 类型，我们可以设置它的默认值为 (1, 1, 1, 1)）。
+
+![图 3.2.1a](/unityshaderbible/44-0.png)
+
+细看我们的 USB_simple_color 的*属性*，我们会注意到在属性域中已经声明了一个纹理属性，我们可以从下面这行代码中证实这一点。
+``` hsls
+Properties
+{
+  _MainTex ("Texture", 2D) = "white" {}
+}
+```
+
+需要考虑的一点是，当我们声明属性时，它要在属性域中保持“开放”的状态，因此我们要避免在代码行末尾添加分号（；），否则 GPU 会无法读取程序。
+
 #### 3.2.1.1 数字与滑块属性
+
+这些类型的属性让我们可以在 Shader 中添加数值。
+假设我们要创建一个有照明功能的着色器，其中 0 表示 0% 照明，而 1 表示 100% 照明。我们可以为其创建一个范围（例如 Range(min, max)），并配置最小、最大和默认照明值。
+
+下面的语法在着色器中声明了数字和滑块。
+
+``` hlsl
+// name ("display name", Range(min, max)) = defaultValue
+// name ("display name", Float) = defaultValue
+// name ("display name", Int) = defaultValue
+
+Shader "InspectorPath/shaderName"
+{
+  Properties
+  {
+    _Specular ("Specular", Range(0.0, 1.1)) = 0.3
+    _Factor ("Color Factor", Float) = 0.3
+    _Cid ("Color id", Int) = 2
+  }
+}
+```
+
+上方的示例中，我们声明了三个属性，一个是名为 **_Specular** 的“浮点区间”类型，另一个是名为 **_Factor** 的“浮点缩放”类型，最后是一个叫 **_Cid** 的“整数”类型。
+
 #### 3.2.1.2 颜色与向量属性
+
+在这个属性中，我们可以在着色器中定义颜色或向量。
+
+假设我们要创建一个可以在执行期间改变颜色的着色器，为此我们需要添加一个颜色属性，让我们可以修改着色器的 RGBA 值。
+
+使用下面的语法在着色器中声明颜色和向量：
+
+``` hlsl
+// name ("display name", Color) = (R, G, B, A)
+// name ("display name", Vector) = (0, 0, 0, 1)
+
+Shader "InspectorPath/shaderName"
+{
+  Properties
+  {
+    _Color ("Tint", Color) = (1, 1, 1, 1)
+    _VPos ("Vertex Position", Vector) = (0, 0, 0, 1)
+  }
+}
+```
+
+上方的示例中，我们声明了两个属性，一个名为 **_Color** 的“颜色”类型， 和一个名为 **_VPos** 的“向量”类型。
+
 #### 3.2.1.3 纹理属性
 
-## 3. Material Property drawer
+这些属性让我们可以在着色器中实现纹理。
+
+如果我们想在我们的物体（例如一个 3D 角色）上放一张纹理，我们需要为其添加一个 2D 属性作为纹理，随后通过一个名为“tex2D”的函数传入，这个函数需要两个参数：模型的纹理和UV坐标。
+
+在电子游戏中常用的一个属性是“Cube”，它代表一个“立方贴图”，这种纹理在生成反射贴图时非常有用，例如，角色盔甲和金属元素的反射。
+
+另一种我们能见到的贴图是 3D 类型的。这类贴图不像前一个那么常用，因为它是有体积的，并且有为空间计算的额外坐标。
+
+如下语法可以在着色器种声明贴图：
+
+``` hlsl
+// name ("display name", 2D) = "defaultColorTexture"
+// name ("display name", Cube) = "defaultColorTexture"
+// name ("display name", 3D) = "defaultColorTexture"
+
+Shader "InspectorPath/shaderName"
+{
+  Properties
+  {
+    _MainTex ("Texture", 2D) = "white" {}
+    _Reflection ("Reflection", Cube) = "black" {}
+    _3DTexture ("3D Texture", 3D) = "white" {}
+  }
+}
+```
+
+有件很重要的事要考虑，那就是我们在声明属性的时候是写在 ShaderLab 声明性语言中，而程序则是写在 Cg 或 HLSL 语言中。
+因为他们是两种不同的语言，所以我们需要创建“**连接变量**”
+
+这些变量使用“uniform”全局声明，不过这一步可以跳过，因为程序会把它们识别为全局变量。
+因此，要为“.shader”添加一个属性，我们必须先在 ShaderLab 中声明，然后在 Cg 或 HLSL 中声明同名变量，最后我们就可以使用了。
+
+``` hlsl
+Shader "InspectorPath/shaderName"
+{
+  Properties
+  {
+    // declare the properties 声明属性
+    _MainTex ("Texture", 2D) = "white" {}
+    _Color ("Color", Color) = (1, 1, 1, 1)
+  }
+  SubShader
+  {
+    Pass
+    {
+      CGPROGRAM
+      ...
+      // add connection variables 添加连接变量
+      sampler2D _MainTex;
+      float4 _Color;
+      ...
+      half4 frag (v2f i) : SV_Target
+      {
+        // use the variables 使用变量
+        half4 col = tex2D(_MainTex, i.uv);
+        return col * _Color;
+      }
+      ENDCG
+    }
+  }
+}
+```
+
+在这个例子中，我们声明了两个属性：**_MainTex** 和 **_Color**。
+之后我们在 CGPROGRAM 中创建了两个连接变量，他们对应了 `sampler2D _MainTex` 和 `float4 _Color`。
+两个属性和两个连接变量必须有相同的名字，以便程序可以识别。
+
+我们会在 [3.27 节]()讲解关于数据类型的地方细说 2D 采样器的运算。
+
+## 3. 材质属性绘制器
+
 ## 3. MPD Toggle
 ## 3. MPD KeywordEnum
 ## 3. MPD Enum
