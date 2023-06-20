@@ -879,9 +879,61 @@ public class USBReplacementController : MonoBehaviour
 正如我们所知，每次我们创建一个新的着色器，它都会配置其 `RenderType` 为 `Opaque`。
 因此，**USB_replacement_shader** 可以替换掉我们先前指定给材质的 Unlit 着色器。
 
+为了让变化清晰可见，我们将在 **USB_replacement_shader** 的片元着色器阶段添加红色，乘上输出颜色。
 
+``` hlsl
+fixed4 frag (v2f i) : SV_Target
+{
+  fixed4 col = tex2D(_MainTex, i.uv);
+  // add a red color 添加红色
+  fixed4 red = fixed4(1, 0, 0, 1);
+  return col * red;
+}
+```
+
+我们要确保在 **USBReplacementController** 脚本的着色器类型的替换变量中引用 **USB_replacement_shader** 。
+
+![图 3.5.1.2b USBReplacementController 已指定给摄像机](/unityshaderbible/67-0.png)
+
+此外，那些我们之前添加到场景中的物体必须有材质 **USB_replaced_mat**。
+
+![图 3.5.1.2c 材质 USB_replaced_mat 已指定到 3D 物体上，包括一个平面、一个盒体和一个球体](/unityshaderbible/67-1.png)
+
+因为 `USBReplacementController` 类已包含 `OnEnable` 和 `OnDisable` 函数，如果我们激活或停用脚本，我们就能看见内置着色器 Unlit 是如何在编辑模式替换为 USB_replacement_shader 的，在渲染时应用了红颜色。
+
+![图 3.5.1.2d USB_replacement_shader 在最终渲染中替换了内置着色器 Unlit](/unityshaderbible/68-0.png)
 
 ### 3.5.2 子着色器混合
+
+混合是将两个像素混合成一个的过程。
+其指令在内置 RP 和可编程 RP 都是兼容的。
+
+*混合*发生在名为“**合并**”（merging）的阶段，它将像素（指在片元着色器阶段处理过的像素）的最终颜色和它的深度结合。
+这个阶段，发生在渲染管线的最后，在**片元着色器阶段**之后，也是执行模板缓冲、z 缓冲和颜色混合的阶段。
+
+默认情况下，这个属性不会写在着色器中，因为这是一个可选功能，且主要用于我们处理透明物体时，例如，例如我们要在一个物体前绘制一个不透明度较低的像素时。
+
+::: tip Alpha vs. Tranparency vs. Opacity
+这三个是什么？好像经常会在见到用这些词来描述透明的物体，有什么区别呢？
+* Transparency：透明度，简单来说，透明度越高，物体越透明。
+* Opacity：有些地方也把它翻译为“透明度”，但正确的翻译应该是“不透明度”，因为 “Low Opacity”意为物体透明。
+* Alpha：一般用在描述颜色时，RGBA 中的 A，表示**不透明度**。
+:::
+
+其默认值为“Blend Off”（关闭混合），但我们可以启动它来生成不同类型的*混合*，就像 PS 中的那样。
+
+其语法如下：
+``` hlsl
+Blend [SourceFactor] [SestinationFactor]
+```
+
+`Blend` 是一个需要两个值进行运算的函数，这两个值称为“因子”（factors），根据一个算式算出屏幕上的最终颜色。
+根据 Unity 官方文档，这个定义了混合值的算式如下：
+
+> $B = SrcFactor * SrcValue [OP] DstFactor * DstValue$
+
+
+
 ### 3.5.3 子着色器 AlphaToMask
 ### 3.5.4 子着色器 ColorMask
 ### 3.5.5 子着色器 Culling 和深度测试
