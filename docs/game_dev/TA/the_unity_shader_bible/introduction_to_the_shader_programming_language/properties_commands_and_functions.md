@@ -932,7 +932,30 @@ Blend [SourceFactor] [SestinationFactor]
 
 > $B = SrcFactor * SrcValue [OP] DstFactor * DstValue$
 
+要理解这个运算，我们要考虑如下：先发生**片元着色器阶段**，然后才是作为可选过程的**混合阶段**。
 
+“**SrcValue**”（source value）已在**片元着色器阶段**处理，对应像素的 RGB 颜色输出。
+
+“**DstValue**”（destination value）对应已经写入到“目标缓冲”（destination buffer）中的 RGB 颜色，也被称为渲染目标（render target）`SV_Target`。
+当着色器中的混合选项未激活时，SrcValue 会覆写 DstValue。
+然而，如果我们激活这个运算，两种颜色会混合成一个新颜色，并覆写之前的 DstValue。
+
+“**SrcFator**”（source factor）和“**DstFactor**”（destination factor）是可配置的三维向量。
+它们的主要功能是修改 SrcValue 和 DstValue 的值以得到有趣的效果。
+
+我们可以在 Unity 文档种找到的因子有：
+
+* **Off**，禁用混合选项。
+* **One**，`(1, 1, 1)`。
+* **Zero**，`(0, 0, 0)`。
+* **SrcColor** 等于 *SrcValue* 的 RGB 值。
+* **SrcAlpha** 等于 *SrcValue* 的 Alpha 值。
+* **OneMinusSrcColor**，1 减 *SrcValue* 的 RGB 值`(1 - R, 1 - G, 1 - B)`。
+* **OneMinusSrcAlpha**，1 减 *SrcValue* 的 Alpha 值`(1 - A, 1 - A, 1 - A)`。
+* **DstColor** 等于 *DstValue* 的 RGB 值。
+* **DstAlpha** 等于 *DstValue* 的 Alpha 值。
+* **OneMinusDstColor**，1 减 *DstValue* 的 RGB 值`(1 - R, 1 - G, 1 - B)`。
+* **OneMinusDstAlpha**，1 减 *DstValue* 的 Alpha 值`(1 - A, 1 - A, 1 - A)`。
 
 ### 3.5.3 子着色器 AlphaToMask
 ### 3.5.4 子着色器 ColorMask

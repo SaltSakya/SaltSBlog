@@ -27,7 +27,7 @@ export const zhNavbar = navbar([
       {
         text: "TA",
         icon: "advance",
-        prefix: "advance/",
+        prefix: "TA/",
         children: [
           { text: "Unity 着色器圣经", icon: "repo", link: "the_unity_shader_bible" },
         ],

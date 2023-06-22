@@ -25,6 +25,6 @@ The Unity Shaders Bible 是由 Fabrizio Espíndola 所著的一本关于计算�
 * [中文索引](idx.md#中文索引)
 * [英文索引](idx.md#英文索引)
 
-<AutoCatalog base='/the_unity_shader_bible/' />
+<AutoCatalog base='/game_dev/TA/the_unity_shader_bible/' />
 
 [^1]: [Jettelly 页面](https://www.jettelly.com/books/unity-shaders-bible/)
