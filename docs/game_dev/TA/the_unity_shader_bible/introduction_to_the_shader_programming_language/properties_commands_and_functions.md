@@ -957,6 +957,50 @@ Blend [SourceFactor] [SestinationFactor]
 * **OneMinusDstColor**，1 减 *DstValue* 的 RGB 值`(1 - R, 1 - G, 1 - B)`。
 * **OneMinusDstAlpha**，1 减 *DstValue* 的 Alpha 值`(1 - A, 1 - A, 1 - A)`。
 
+值得一提的是，Alpha 通道的混合和处理像素 RGB 颜色的方式相同，但因为它并不常用，因此是在单独的过程中处理。
+同样，通过不执行这个过程，可以优化向渲染目标的写入。
+
+让我们用如下的例子解释上述问题。
+
+假设我们有一个 RGB 颜色像素，其值为 $[0.5_R, 0.45_G, 0.35_B]$。
+这个颜色经过**片元着色器阶段**处理，因此对应 *DstValue*。
+现在，我们用“*SrcFactor* **One**”（$[1, 1, 1]$）乘上这个值。
+
+> $B = [0.5_R, 0.45_G, 0.35_B][OP] DstFactor * DstValue$
+
+“OP” 表示我们要执行的运算。默认情况下为“叠加”（Add）。
+
+> $B = [0.5_R, 0.45_G, 0.35_B]+ DstFactor * DstValue$
+
+一旦我们取得了第一个运算的值，它就会被 *DstValue* 覆写，因此，其值同样为 $[0.5_R, 0.45_G, 0.35_B]$。
+因此我们用“*DstFactor* **DstColor**”，其值等于当前的 *DstValue* 值。
+
+> $DstFactor [0.5_R, 0.45_G, 0.35_B] * DstValue [0.5_R, 0.45_G, 0.35_B] = [0.25_R, 0.20_G, 0.12_B]$
+
+最后，像素的输出颜色为：
+
+> $B = [0.5_R, 0.45_G, 0.35_B] + [0.25_R, 0.20_G, 0.12_B]$
+> $B = [0.75_R, 0.65_G, 0.47_B]$
+
+如果我们想在我们的着色器种启用*混合*，我们必须使用 `Blend` 命令，后接 `SrcFactor` 和 `DstFactor`。
+
+其语法如下：
+
+```hlsl
+Shader "InspectorPath/shaderName"
+{
+  Properties {...}
+  SubShader
+  {
+    Tag { "Queue"="Transparent" "RenderType"="Transparent" }
+    Blend SrcAlpha OneMinusSrcAlpha
+  }
+}
+```
+
+如果想在我们的着色器中使用*混合*，需要添加并修改 `Render Queue`。
+我们知道 `Queue` 标签的默认值为 `Geometry`，意为我们的物体是不透明的。如果想让我们的物体半透明，那我们必须先将 `Queue` 改为 `Transparent`，并添加某种混合。
+
 ### 3.5.3 子着色器 AlphaToMask
 ### 3.5.4 子着色器 ColorMask
 ### 3.5.5 子着色器 Culling 和深度测试
